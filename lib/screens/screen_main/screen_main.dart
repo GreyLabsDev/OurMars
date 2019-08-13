@@ -26,12 +26,22 @@ class ScreenMainState extends State {
                 child: Text(AppStrings.screen_main_title, style: AppStyles.text_style_title,),
               ),
               SizedBox(height: 32.0,),
-              StatelessRoversPager()
+              StatelessRoversPager(),
+              SizedBox(height: 16.0,),
+              Padding(
+                padding: EdgeInsets.only(left: 32.0),
+                child: StatefullYearSelectorWidget(
+                  yearString: "2019",
+                  onTap: () {},
+                ),
+              )          
             ],
           ),
       ),
     );
   }
 }
+
+
 
 

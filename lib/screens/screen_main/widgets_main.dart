@@ -96,3 +96,32 @@ class StatelessRoverCard extends StatelessWidget {
     );
   }
 }
+
+
+class StatefullYearSelectorWidget extends StatefulWidget {
+  final String yearString;
+  final Function() onTap;
+
+  const StatefullYearSelectorWidget({Key key, this.yearString, this.onTap}) : super(key: key);
+
+  @override
+  State<StatefulWidget> createState() => StatefullYearSelectorWidgetState(yearString, onTap);
+}
+
+class StatefullYearSelectorWidgetState extends State {
+  final String yearString;
+  final Function() onTap;
+
+  StatefullYearSelectorWidgetState(this.yearString, this.onTap);
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: <Widget>[
+        Text(yearString, style: AppStyles.text_style_year,),
+        SizedBox(width: 8.0,),
+        Icon(Icons.arrow_drop_down, color: Colors.white,)
+      ],
+    );
+  }
+}
