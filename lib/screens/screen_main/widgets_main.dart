@@ -174,5 +174,4 @@ class StatelessMonthChip extends StatelessWidget {
         style: isSelected ? AppStyles.text_style_default_dark : AppStyles.text_style_default,),
     );
   }
-
 }
