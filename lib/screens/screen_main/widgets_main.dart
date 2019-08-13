@@ -98,21 +98,21 @@ class StatelessRoverCard extends StatelessWidget {
 }
 
 
-class StatefullYearSelectorWidget extends StatefulWidget {
+class StatefulYearSelectorWidget extends StatefulWidget {
   final String yearString;
   final Function() onTap;
 
-  const StatefullYearSelectorWidget({Key key, this.yearString, this.onTap}) : super(key: key);
+  const StatefulYearSelectorWidget({Key key, this.yearString, this.onTap}) : super(key: key);
 
   @override
-  State<StatefulWidget> createState() => StatefullYearSelectorWidgetState(yearString, onTap);
+  State<StatefulWidget> createState() => StatefulYearSelectorWidgetState(yearString, onTap);
 }
 
-class StatefullYearSelectorWidgetState extends State {
+class StatefulYearSelectorWidgetState extends State {
   final String yearString;
   final Function() onTap;
 
-  StatefullYearSelectorWidgetState(this.yearString, this.onTap);
+  StatefulYearSelectorWidgetState(this.yearString, this.onTap);
 
   @override
   Widget build(BuildContext context) {
@@ -124,4 +124,8 @@ class StatefullYearSelectorWidgetState extends State {
       ],
     );
   }
+}
+
+class StatefulMonthChipsGroup extends StatefulWidget {
+
 }

@@ -30,7 +30,7 @@ class ScreenMainState extends State {
               SizedBox(height: 16.0,),
               Padding(
                 padding: EdgeInsets.only(left: 32.0),
-                child: StatefullYearSelectorWidget(
+                child: StatefulYearSelectorWidget(
                   yearString: "2019",
                   onTap: () {},
                 ),
