@@ -18,10 +18,11 @@ class ScreenMainState extends State {
     return Scaffold(
       backgroundColor: AppColors.colorBackground,
       body: SafeArea(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              Padding(
+        child: CustomScrollView(
+          slivers: <Widget>[
+            SliverList(
+              delegate: SliverChildListDelegate([
+                Padding(
                 padding: EdgeInsets.only(left: 32.0, top: 16.0),
                 child: Text(AppStrings.screen_main_title, style: AppStyles.text_style_title,),
               ),
@@ -37,7 +38,9 @@ class ScreenMainState extends State {
               ),
               SizedBox(height: 16.0,),
               Container(height: 36.0, child: StatefulMonthChipsGroup(),)
-            ],
+              ]),
+            )
+          ],
           ),
       ),
     );
