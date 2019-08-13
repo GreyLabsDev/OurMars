@@ -34,7 +34,9 @@ class ScreenMainState extends State {
                   yearString: "2019",
                   onTap: () {},
                 ),
-              )          
+              ),
+              SizedBox(height: 16.0,),
+              Container(height: 36.0, child: StatefulMonthChipsGroup(),)
             ],
           ),
       ),

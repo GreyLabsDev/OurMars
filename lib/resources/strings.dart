@@ -9,4 +9,19 @@ class AppStrings {
   static const rover_name_curiosity = "Curiosity";
   static const rover_name_opportunity = "Opportunity";
   static const rover_name_spirit = "Spirit";
+
+  static const monthsList = [
+    "Jan",
+    "Feb",
+    "Mar",
+    "Apr",
+    "May",
+    "June",
+    "July",
+    "Aug",
+    "Sep",
+    "Oct",
+    "Nov",
+    "Dec",
+  ];
 }

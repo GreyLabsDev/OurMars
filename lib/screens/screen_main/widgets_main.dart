@@ -87,7 +87,7 @@ class StatelessRoverCard extends StatelessWidget {
                   borderRadius: BorderRadius.circular(16.0)
                 ),
                 padding: EdgeInsets.all(16.0),
-                child: Text(roverName, style: AppStyles.text_style_rover_title,),
+                child: Text(roverName, style: AppStyles.text_style_default,),
               ),
             ),
           ],
@@ -127,5 +127,52 @@ class StatefulYearSelectorWidgetState extends State {
 }
 
 class StatefulMonthChipsGroup extends StatefulWidget {
+  @override
+  State<StatefulWidget> createState() => StatefulMonthChipsGroupState();
+
+}
+
+class StatefulMonthChipsGroupState extends State {
+  int selectedMonthPos = null;
+  @override
+  Widget build(BuildContext context) {
+    return ListView.builder(
+          scrollDirection: Axis.horizontal,
+          itemCount: AppStrings.monthsList.length,
+          itemBuilder: (BuildContext context, int index) {
+              return Padding(
+                padding: EdgeInsets.only(left: 4.0, right: 4.0),
+                child: StatelessMonthChip(
+                  monthName: AppStrings.monthsList[index],
+                  isSelected: index == selectedMonthPos,
+                ),
+              );
+            },
+        );
+  }
+}
+
+class StatelessMonthChip extends StatelessWidget {
+  final String monthName;
+  final bool isSelected;
+  Function() onTap;
+
+  StatelessMonthChip({Key key, this.monthName, this.isSelected, this.onTap}) : super(key: key);
+  
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: EdgeInsets.only(left: 16.0, top: 4.0, bottom: 4.0, right: 16.0),
+      decoration: new BoxDecoration(
+          border: new Border.all(color: Colors.white, width: 1.0),
+          shape: BoxShape.rectangle,
+          borderRadius: BorderRadius.circular(22.0),
+          color: isSelected ? Colors.white : Colors.transparent
+        ),
+      child: Text(
+        monthName, 
+        style: isSelected ? AppStyles.text_style_default_dark : AppStyles.text_style_default,),
+    );
+  }
 
 }
