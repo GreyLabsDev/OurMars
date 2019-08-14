@@ -30,7 +30,7 @@ class ImageListItem extends StatelessWidget {
 class StatefullFavoriteButton extends StatefulWidget {
   bool isFavorite;
 
-  StatefullFavoriteButton(this.isFavorite)
+  StatefullFavoriteButton(this.isFavorite);
 
   @override
   State<StatefulWidget> createState() => StatefullFavoriteButtonState(isFavorite);
