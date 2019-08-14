@@ -175,3 +175,95 @@ class StatelessMonthChip extends StatelessWidget {
     );
   }
 }
+
+class StatelessBottomSheetMenuContent extends StatelessWidget {
+  Function() onFavoritesClick;
+  Function() onAboutClick;
+
+  StatelessBottomSheetMenuContent({Key key, this.onAboutClick, this.onFavoritesClick}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: <Widget>[
+        SizedBox(height: 8.0,),
+        Container(width: 48.0, height: 2.0, color: Colors.grey,),
+        SizedBox(height: 32.0,),
+        InkWell(
+          onTap: onFavoritesClick,
+          child: Text(AppStrings.button_favorites, style: AppStyles.text_style_default,),
+        ),
+        SizedBox(height: 8.0,),
+        Padding(
+          padding: EdgeInsets.only(left: 32.0, right: 32.0),
+          child: Container(height: 1.0, color: Colors.grey,),
+        ),
+        SizedBox(height: 8.0,),
+        InkWell(
+          onTap: onAboutClick,
+          child: Text(AppStrings.button_about, style: AppStyles.text_style_default,),
+        )
+      ],
+    );
+  }
+}
+
+class SemiRoundedBorderContainer extends StatelessWidget {
+  final BorderSide borderSide;
+  final Radius radius;
+  final Color background;
+  final Widget child;
+  final double height;
+
+  const SemiRoundedBorderContainer({
+    Key key,
+    @required this.borderSide,
+    @required this.radius,
+    @required this.background,
+    @required this.child,
+    @required this.height
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return new Container(
+      height: height,
+      width: double.infinity,
+      child: ClipRect(
+        clipper: new SemiRoundedBorderClipper(borderSide.width + 1.0),
+        child: new DecoratedBox(
+          decoration: new ShapeDecoration(
+            color: background,
+            shape: new RoundedRectangleBorder(
+              side: borderSide,
+              borderRadius: new BorderRadius.only(
+                topLeft: radius,
+                topRight: radius,
+              ),
+            ),
+          ),
+          child: child,
+        ),
+      ),
+    );
+  }
+}
+
+class SemiRoundedBorderClipper extends CustomClipper<Rect> {
+  final double borderStrokeWidth;
+
+  const SemiRoundedBorderClipper(this.borderStrokeWidth);
+
+  @override
+  Rect getClip(Size size) {
+    return new Rect.fromLTRB(0.0, 0.0, size.width, size.height - borderStrokeWidth);
+  }
+
+  @override
+  bool shouldReclip(CustomClipper<Rect> oldClipper) {
+    if (oldClipper.runtimeType != SemiRoundedBorderClipper) return true;
+    return (oldClipper as SemiRoundedBorderClipper).borderStrokeWidth != borderStrokeWidth;
+  }
+}

@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:our_mars/resources/colors.dart';
 import 'package:our_mars/resources/strings.dart';
 import 'package:our_mars/resources/style.dart';
+import 'package:our_mars/screens/screen_about/screen_about.dart';
+import 'package:our_mars/screens/screen_favorites/screen_favorites.dart';
 import 'package:our_mars/screens/screen_favorites/widgets_favorites.dart';
 
 import 'widgets_main.dart';
@@ -14,13 +16,41 @@ class ScreenMain extends StatefulWidget {
 }
 
 class ScreenMainState extends State with SingleTickerProviderStateMixin {
-  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
+  final GlobalKey<ScaffoldState> scaffoldKey = new GlobalKey<ScaffoldState>();
+  var isBottomSheetOpened = false;
+  PersistentBottomSheetController bottomSheetMenuController;
+
+  void showBottomSheetMenu() {
+    if (isBottomSheetOpened) {
+      bottomSheetMenuController.close();
+    } else {
+      bottomSheetMenuController = scaffoldKey.currentState.showBottomSheet(
+       (builder) {
+           return SemiRoundedBorderContainer(
+              borderSide: const BorderSide(color: Colors.white, width: 1.0),
+              radius: const Radius.circular(32.0),
+              background: const Color(0xFF000000),
+              height: 160.0,
+              child: StatelessBottomSheetMenuContent(
+                onFavoritesClick: () {
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => ScreenFavorites()));
+                },
+                onAboutClick: () {
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => ScreenAbout()));
+                },
+              ),
+            );
+          },
+          backgroundColor: Colors.transparent,
+      );
+    }
+    isBottomSheetOpened = !isBottomSheetOpened;
+  }
   
   @override
   Widget build(BuildContext context) {
-    
     return Scaffold(
-      key: _scaffoldKey,
+      key: scaffoldKey,
       backgroundColor: AppColors.colorBackground,
       body: SafeArea(
         child: Stack(
@@ -36,29 +66,7 @@ class ScreenMainState extends State with SingleTickerProviderStateMixin {
                           Text(AppStrings.screen_main_title, style: AppStyles.text_style_title,),
                           Spacer(),
                           IconButton(
-                            onPressed: () {
-                              _scaffoldKey.currentState.showBottomSheet(
-                                (BuildContext context) {
-                                  return Container(
-                                    height: 180.0,
-                                    width: double.infinity,
-                                    color: Colors.transparent,
-                                    child: Container(
-                                      decoration: new BoxDecoration(
-                                        color: Colors.white,
-                                       /* borderRadius: BorderRadius.only(topLeft: Radius.circular(16.0), topRight: )*/
-                                      ),
-                                      child: Column(
-                                        children: <Widget>[
-                                          Text("Favorites", style: AppStyles.text_style_default,),
-                                          Text("About", style: AppStyles.text_style_default,)
-                                        ],
-                                      ),
-                                    ),
-                                  );
-                                }
-                              );
-                            },
+                            onPressed: showBottomSheetMenu,
                             icon: Icon(Icons.menu, color: Colors.white,),
                           )
                         ],
@@ -79,7 +87,26 @@ class ScreenMainState extends State with SingleTickerProviderStateMixin {
                     SizedBox(height: 16.0,),
                   ]),
                 ),
-                ImageListGrid(),
+                SliverGrid.count(
+                  crossAxisCount: 3,
+                  children: [
+                    ImageListItem(imageUrl: 'https://mk0astronomynow9oh6g.kinstacdn.com/wp-content/uploads/2017/09/pia21850-1785MR009211_sitesphericalmosaic_noscale-full.jpg', isFavorite: false),
+                    ImageListItem(imageUrl: 'https://boygeniusreport.files.wordpress.com/2017/05/mars1.jpg?quality=98&strip=all&w=782', isFavorite: true),
+                    ImageListItem(imageUrl: 'https://thenypost.files.wordpress.com/2019/03/mars-pebbles.jpg?quality=90&strip=all&w=618&h=410&crop=1', isFavorite: false),
+                    ImageListItem(imageUrl: 'https://www.geek.com/wp-content/uploads/2019/04/curiosity-1-625x352.jpg', isFavorite: true),
+                    ImageListItem(imageUrl: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRVIYGyyRdAGJ5N5WISIeinevCUezLB9MwJCE01hmh5ZJBls9ZM', isFavorite: false),
+                    ImageListItem(imageUrl: 'https://mk0astronomynow9oh6g.kinstacdn.com/wp-content/uploads/2017/09/pia21850-1785MR009211_sitesphericalmosaic_noscale-full.jpg', isFavorite: false),
+                    ImageListItem(imageUrl: 'https://boygeniusreport.files.wordpress.com/2017/05/mars1.jpg?quality=98&strip=all&w=782', isFavorite: true),
+                    ImageListItem(imageUrl: 'https://thenypost.files.wordpress.com/2019/03/mars-pebbles.jpg?quality=90&strip=all&w=618&h=410&crop=1', isFavorite: false),
+                    ImageListItem(imageUrl: 'https://www.geek.com/wp-content/uploads/2019/04/curiosity-1-625x352.jpg', isFavorite: true),
+                    ImageListItem(imageUrl: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRVIYGyyRdAGJ5N5WISIeinevCUezLB9MwJCE01hmh5ZJBls9ZM', isFavorite: false),
+                    ImageListItem(imageUrl: 'https://mk0astronomynow9oh6g.kinstacdn.com/wp-content/uploads/2017/09/pia21850-1785MR009211_sitesphericalmosaic_noscale-full.jpg', isFavorite: false),
+                    ImageListItem(imageUrl: 'https://boygeniusreport.files.wordpress.com/2017/05/mars1.jpg?quality=98&strip=all&w=782', isFavorite: true),
+                    ImageListItem(imageUrl: 'https://thenypost.files.wordpress.com/2019/03/mars-pebbles.jpg?quality=90&strip=all&w=618&h=410&crop=1', isFavorite: false),
+                    ImageListItem(imageUrl: 'https://www.geek.com/wp-content/uploads/2019/04/curiosity-1-625x352.jpg', isFavorite: true),
+                    ImageListItem(imageUrl: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRVIYGyyRdAGJ5N5WISIeinevCUezLB9MwJCE01hmh5ZJBls9ZM', isFavorite: false),
+                  ],
+                ),
               ],
             ),
             // buildBottomSheet()
@@ -89,7 +116,6 @@ class ScreenMainState extends State with SingleTickerProviderStateMixin {
     );
   }
 }
-
 
 
 
