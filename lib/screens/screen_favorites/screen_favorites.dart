@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:our_mars/data/api/nasa_api.dart';
+import 'package:our_mars/data/model/models.dart';
 import 'package:our_mars/resources/colors.dart';
 import 'package:our_mars/resources/strings.dart';
 import 'package:our_mars/resources/style.dart';
@@ -32,7 +34,17 @@ class ScreenFavoritesState extends State {
               pinned: true,
               backgroundColor: AppColors.colorBackground,
             ),
-            ImageListGrid(),
+            FutureBuilder<List<PhotoModel>>(
+                    future: NasaApi().getPhotos(),
+                    builder: (BuildContext context, AsyncSnapshot snapshot) {
+                      if (snapshot.hasData) {
+                        return ImageListGrid(photos: snapshot.data,);
+                      } else if (snapshot.hasError) {
+                        return SliverList(delegate: SliverChildListDelegate([Text("Error", style: AppStyles.text_style_default,)]),); Text("${snapshot.error}");
+                      }
+                      return SliverList(delegate: SliverChildListDelegate([Text("Loading...", style: AppStyles.text_style_default,)]),);
+                    },
+                  ),
           ],
         ),
       )),

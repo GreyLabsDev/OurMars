@@ -1,6 +1,8 @@
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:our_mars/data/api/nasa_api.dart';
+import 'package:our_mars/data/model/models.dart';
 import 'package:our_mars/resources/colors.dart';
 import 'package:our_mars/resources/strings.dart';
 import 'package:our_mars/resources/style.dart';
@@ -37,6 +39,7 @@ class ScreenMainState extends State with SingleTickerProviderStateMixin {
                 },
                 onAboutClick: () {
                   Navigator.push(context, MaterialPageRoute(builder: (context) => ScreenAbout()));
+                  
                 },
               ),
             );
@@ -89,7 +92,17 @@ class ScreenMainState extends State with SingleTickerProviderStateMixin {
                 ),
                 SliverPadding(
                   padding: EdgeInsets.only(left: 16.0, right: 16.0),
-                  sliver: ImageListGrid(),
+                  sliver: FutureBuilder<List<PhotoModel>>(
+                    future: NasaApi().getPhotos(),
+                    builder: (BuildContext context, AsyncSnapshot snapshot) {
+                      if (snapshot.hasData) {
+                        return ImageListGrid(photos: snapshot.data,);
+                      } else if (snapshot.hasError) {
+                        return SliverList(delegate: SliverChildListDelegate([Text("Error", style: AppStyles.text_style_default,)]),); Text("${snapshot.error}");
+                      }
+                      return SliverList(delegate: SliverChildListDelegate([Text("Loading...", style: AppStyles.text_style_default,)]),);
+                    },
+                  ),
                 )
               ],
             ),
