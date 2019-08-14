@@ -15,62 +15,6 @@ class ScreenMain extends StatefulWidget {
 
 class ScreenMainState extends State with SingleTickerProviderStateMixin {
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
-  static const PANEL_HEADER_HEIGHT = 32.0;
-
-  AnimationController animController;
-
-  bool get isPanelVisible {
-    final AnimationStatus status = animController.status;
-    return status == AnimationStatus.completed || status == AnimationStatus.forward;
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    animController = new AnimationController(duration: Duration(milliseconds: 250), value: 1, vsync: this);
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-    animController.dispose();
-  }
-
-  Animation<RelativeRect> getPanelAnimation(BoxConstraints constraints) {
-    final double height = constraints.biggest.height;
-    final double top = height - PANEL_HEADER_HEIGHT;
-    final double bottom = -PANEL_HEADER_HEIGHT;
-    return new RelativeRectTween(
-      begin: new RelativeRect.fromLTRB(0.0, top, 0.0, bottom),
-      end: new RelativeRect.fromLTRB(0.0, 0.0, 0.0, 0.0),
-    ).animate(new CurvedAnimation(parent: animController, curve: Curves.linear));
-  }
-
-  
-
-  Widget buildBottomSheet() {
-    return LayoutBuilder(
-      builder: (BuildContext context, BoxConstraints constraints) {
-        final Animation<RelativeRect> animation = getPanelAnimation(constraints);
-        return new PositionedTransition(
-            rect: animation,
-            child: new Material(
-              borderRadius: const BorderRadius.only(
-                  topLeft: const Radius.circular(16.0),
-                  topRight: const Radius.circular(16.0)),
-              elevation: 12.0,
-              child: new Column(children: <Widget>[
-                new Container(
-                  height: PANEL_HEADER_HEIGHT,
-                  child: new Center(child: new Text("panel")),
-                ),
-                new Expanded(child: new Center(child: new Text("content")))
-              ]),
-            ),
-          );
-      },
-    );
-  }
   
   @override
   Widget build(BuildContext context) {
@@ -87,7 +31,38 @@ class ScreenMainState extends State with SingleTickerProviderStateMixin {
                   delegate: SliverChildListDelegate([
                     Padding(
                       padding: EdgeInsets.only(left: 32.0, top: 16.0),
-                      child: Text(AppStrings.screen_main_title, style: AppStyles.text_style_title,),
+                      child: Row(
+                        children: <Widget>[
+                          Text(AppStrings.screen_main_title, style: AppStyles.text_style_title,),
+                          Spacer(),
+                          IconButton(
+                            onPressed: () {
+                              _scaffoldKey.currentState.showBottomSheet(
+                                (BuildContext context) {
+                                  return Container(
+                                    height: 180.0,
+                                    width: double.infinity,
+                                    color: Colors.transparent,
+                                    child: Container(
+                                      decoration: new BoxDecoration(
+                                        color: Colors.white,
+                                        borderRadius: BorderRadius.only(topLeft: Radius.circular(16.0), topRight: )
+                                      ),
+                                      child: Column(
+                                        children: <Widget>[
+                                          Text("Favorites", style: AppStyles.text_style_default,),
+                                          Text("About", style: AppStyles.text_style_default,)
+                                        ],
+                                      ),
+                                    ),
+                                  );
+                                }
+                              );
+                            },
+                            icon: Icon(Icons.menu, color: Colors.white,),
+                          )
+                        ],
+                      )
                     ),
                     SizedBox(height: 32.0,),
                     StatelessRoversPager(),

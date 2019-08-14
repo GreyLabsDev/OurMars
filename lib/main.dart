@@ -10,7 +10,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: AppStrings.screen_app_name,
-      home: ScreenMain(),
+      home: ScreenFavorites(),
     );
   }
 }

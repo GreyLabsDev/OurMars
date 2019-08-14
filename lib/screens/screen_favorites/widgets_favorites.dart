@@ -6,12 +6,6 @@ class ImageListItem extends StatelessWidget {
 
   ImageListItem({Key key, this.imageUrl, this.isFavorite}) : super(key: key);
 
-  Icon buildFavoriteIcon() {
-    if (isFavorite) {
-      return Icon(Icons.favorite, color: Colors.white);
-    } else return Icon(Icons.favorite_border, color: Colors.white);
-  }
-
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -24,12 +18,41 @@ class ImageListItem extends StatelessWidget {
         ),
         child: Stack(
           children: <Widget>[
-            Positioned(
-              left: 8.0,
-              bottom: 8.0,
-              child: buildFavoriteIcon(),
+            Align(
+              alignment: Alignment.bottomLeft,
+              child: StatefullFavoriteButton(isFavorite),
             ),
           ],
         ));
   }
+}
+
+class StatefullFavoriteButton extends StatefulWidget {
+  bool isFavorite;
+
+  StatefullFavoriteButton(this.isFavorite)
+
+  @override
+  State<StatefulWidget> createState() => StatefullFavoriteButtonState(isFavorite);
+
+}
+
+class StatefullFavoriteButtonState extends State {
+  bool isFavorite;
+
+  StatefullFavoriteButtonState(this.isFavorite);
+
+  void onFavortePressed() {
+    isFavorite = !isFavorite;
+    setState(() {});
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return IconButton(
+      icon: Icon(isFavorite ? Icons.favorite : Icons.favorite_border, color: Colors.white),
+      onPressed: onFavortePressed,
+    );
+  }
+
 }
