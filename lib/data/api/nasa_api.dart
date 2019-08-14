@@ -64,7 +64,7 @@ class NasaApi {
   }
 
   Future<List<PhotoModel>> getPhotos() async {
-    final resp = await http.get(api_endpoint+api_path_rover_curiosity+api_path_photos+"?earth_date=2015-6-3&"+api_param_key+nasa_api_key);
+    final resp = await http.get(api_endpoint+api_path_rover_curiosity+api_path_photos+"?earth_date=2018-12-20&"+api_param_key+nasa_api_key);
     print(resp.body.toString());
     if (resp.statusCode == 200) {
       return PhotosResponse.fromJson(json.decode(resp.body)).photos;
