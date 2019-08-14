@@ -87,7 +87,10 @@ class ScreenMainState extends State with SingleTickerProviderStateMixin {
                     SizedBox(height: 16.0,),
                   ]),
                 ),
-                ImageListGrid(),
+                SliverPadding(
+                  padding: EdgeInsets.only(left: 16.0, right: 16.0),
+                  sliver: ImageListGrid(),
+                )
               ],
             ),
             // buildBottomSheet()
