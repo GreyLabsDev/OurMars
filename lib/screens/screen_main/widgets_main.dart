@@ -1,4 +1,6 @@
 
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:our_mars/resources/strings.dart';
 import 'package:our_mars/resources/style.dart';
@@ -133,47 +135,62 @@ class StatefulMonthChipsGroup extends StatefulWidget {
 }
 
 class StatefulMonthChipsGroupState extends State {
-  int selectedMonthPos = null;
+  int selectedMonthPos = 0;
+
+  void updateChipsState(int selectedChip) {
+    setState(() {
+      if (selectedMonthPos == null || selectedMonthPos != selectedChip) {
+        selectedMonthPos = selectedChip;
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
           scrollDirection: Axis.horizontal,
           itemCount: AppStrings.monthsList.length,
           itemBuilder: (BuildContext context, int index) {
-              return Padding(
-                padding: EdgeInsets.only(left: 4.0, right: 4.0),
-                child: StatelessMonthChip(
-                  monthName: AppStrings.monthsList[index],
-                  isSelected: index == selectedMonthPos,
-                ),
-              );
-            },
-        );
+            var isChipSelected = selectedMonthPos == index;
+            return new Padding(
+              padding: EdgeInsets.only(left: 4.0,  right: 4.0),
+              child: StatelessMonthChip(
+                monthName: AppStrings.monthsList[index],
+                isSelected: isChipSelected,
+                onTap: () {updateChipsState(index);},
+              ),
+            );
+          },
+      );
   }
 }
 
 class StatelessMonthChip extends StatelessWidget {
   final String monthName;
-  final bool isSelected;
+  bool isSelected;
   Function() onTap;
 
   StatelessMonthChip({Key key, this.monthName, this.isSelected, this.onTap}) : super(key: key);
-  
+
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.only(left: 16.0, top: 4.0, bottom: 4.0, right: 16.0),
-      decoration: new BoxDecoration(
-          border: new Border.all(color: Colors.white, width: 1.0),
-          shape: BoxShape.rectangle,
-          borderRadius: BorderRadius.circular(22.0),
-          color: isSelected ? Colors.white : Colors.transparent
-        ),
-      child: Text(
-        monthName, 
-        style: isSelected ? AppStyles.text_style_default_dark : AppStyles.text_style_default,),
+    return GestureDetector(
+      onTap: onTap,
+      child: new Container(
+        padding: EdgeInsets.only(left: 16.0, top: 4.0, bottom: 4.0, right: 16.0),
+        decoration: new BoxDecoration(
+            border: new Border.all(color: Colors.white, width: 1.0),
+            shape: BoxShape.rectangle,
+            borderRadius: BorderRadius.circular(22.0),
+            color: isSelected ? Colors.white : Colors.transparent
+          ),
+        child: new Text(
+          monthName, 
+          style: isSelected ? AppStyles.text_style_default_dark : AppStyles.text_style_default,),
+      ),
     );
   }
+
 }
 
 class StatelessBottomSheetMenuContent extends StatelessWidget {
