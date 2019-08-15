@@ -36,7 +36,7 @@ class ScreenFavoritesState extends State {
               backgroundColor: AppColors.colorBackground,
             ),
             FutureBuilder<List<PhotoModel>>(
-                    future: new NasaApi().getPhotos("2009-3-2", RoverType.Sprit),
+                    future: new NasaApi().getPhotos("2005-2-2", RoverType.Sprit),
                     builder: (BuildContext context, AsyncSnapshot snapshot) {
                       if (snapshot.hasData) {
                         if ((snapshot.data as List<PhotoModel>).length > 0) {
