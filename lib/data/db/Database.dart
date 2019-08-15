@@ -40,7 +40,7 @@ class DBProvider {
   insertPhotoModel(PhotoModel newPhotoModel) async {
     final db = await database;
     var raw = await db.rawInsert(
-        "INSERT Into Photos (id,sol,img_src,earth_date,camera,rover_type, is_favorite)"
+        "REPLACE Into Photos (id,sol,img_src,earth_date,camera,rover_type, is_favorite)"
         " VALUES (?,?,?,?,?,?,?)",
         [newPhotoModel.id, newPhotoModel.sol, newPhotoModel.imageUrl, newPhotoModel.earthDate,
           newPhotoModel.camera, newPhotoModel.roverType, newPhotoModel.isFavorite]);
