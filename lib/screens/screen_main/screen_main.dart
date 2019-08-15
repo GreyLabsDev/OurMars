@@ -23,9 +23,9 @@ class ScreenMainState extends State with SingleTickerProviderStateMixin {
   PersistentBottomSheetController bottomSheetMenuController;
 
   void showBottomSheetMenu() {
-    if (isBottomSheetOpened) {
-      bottomSheetMenuController.close();
-    } else {
+    // if (isBottomSheetOpened) {
+      // bottomSheetMenuController.close();
+    // } else {
       bottomSheetMenuController = scaffoldKey.currentState.showBottomSheet(
        (builder) {
            return SemiRoundedBorderContainer(
@@ -46,7 +46,7 @@ class ScreenMainState extends State with SingleTickerProviderStateMixin {
           },
           backgroundColor: Colors.transparent,
       );
-    }
+    // }
     isBottomSheetOpened = !isBottomSheetOpened;
   }
   
