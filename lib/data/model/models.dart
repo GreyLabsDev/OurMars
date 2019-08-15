@@ -11,22 +11,24 @@ class PhotosResponse {
 }
 
 class PhotoModel {
+  final int id;
   final int sol;
   final String imageUrl;
   final String earthDate;
   final String camera;
+  String roverType;
 
-  PhotoModel({this.sol, this.imageUrl, this.earthDate, this.camera});
+  PhotoModel({this.id, this.sol, this.imageUrl, this.earthDate, this.camera});
 
   factory PhotoModel.fromJson(Map<String, dynamic> json) {
     return PhotoModel(
+      id: json['id'],
       sol: json['sol'],
       imageUrl: json['img_src'],
-      earthDate: json['2015-06-03'],
+      earthDate: json['earth_date'],
       camera: CameraModel.fromJson(json['camera']).cameraName
     );
   }
-  
 }
 
 class CameraModel {

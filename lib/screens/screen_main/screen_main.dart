@@ -39,7 +39,6 @@ class ScreenMainState extends State with SingleTickerProviderStateMixin {
                 },
                 onAboutClick: () {
                   Navigator.push(context, MaterialPageRoute(builder: (context) => ScreenAbout()));
-                  
                 },
               ),
             );
@@ -93,11 +92,14 @@ class ScreenMainState extends State with SingleTickerProviderStateMixin {
                 SliverPadding(
                   padding: EdgeInsets.only(left: 16.0, right: 16.0),
                   sliver: FutureBuilder<List<PhotoModel>>(
-                    future: NasaApi().getPhotos(),
+                    future: NasaApi().getPhotosTest(),
                     builder: (BuildContext context, AsyncSnapshot snapshot) {
                       if (snapshot.hasData) {
-                        return ImageListGrid(photos: snapshot.data,);
+                        if ((snapshot.data as List<PhotoModel>).length > 0) {
+                          return ImageListGrid(photos: snapshot.data,);
+                        } else return SliverList(delegate: SliverChildListDelegate([Text("No photo for this time", style: AppStyles.text_style_default,)]),);
                       } else if (snapshot.hasError) {
+                        print(snapshot.error.toString());
                         return SliverList(delegate: SliverChildListDelegate([Text("Error", style: AppStyles.text_style_default,)]),); Text("${snapshot.error}");
                       }
                       return SliverList(delegate: SliverChildListDelegate([Text("Loading...", style: AppStyles.text_style_default,)]),);

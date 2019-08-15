@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:our_mars/data/api/nasa_api.dart';
 import 'package:our_mars/data/model/models.dart';
+import 'package:our_mars/screens/screen_photo/screen_photo.dart';
 
 class ImageListGrid extends StatelessWidget {
   final List<PhotoModel> photos;
@@ -9,7 +9,7 @@ class ImageListGrid extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var imageItems = photos.map((model) => ImageListItem(imageUrl: model.imageUrl, isFavorite: false,)).toList();
+    var imageItems = photos.map((model) => ImageListItem(photoModel: model, isFavorite: false,)).toList();
     return SliverGrid.count(
       crossAxisCount: 3,
       children: imageItems,
@@ -18,18 +18,22 @@ class ImageListGrid extends StatelessWidget {
 }
 
 class ImageListItem extends StatelessWidget {
-  final String imageUrl;
+  final PhotoModel photoModel;
   final bool isFavorite;
 
-  ImageListItem({Key key, this.imageUrl, this.isFavorite}) : super(key: key);
+  ImageListItem({Key key, this.photoModel, this.isFavorite}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return GestureDetector(
+      onTap: () {
+        Navigator.push(context, MaterialPageRoute(builder: (context) => ScreenPhoto(photoModel: photoModel,)));
+      },
+      child: Container(
         margin: EdgeInsets.all(5),
         decoration: BoxDecoration(
           image:
-              DecorationImage(fit: BoxFit.cover, image: NetworkImage(imageUrl)),
+              DecorationImage(fit: BoxFit.cover, image: NetworkImage(this.photoModel.imageUrl)),
           borderRadius: BorderRadius.all(Radius.circular(10.0)),
           color: Colors.redAccent,
         ),
@@ -41,7 +45,8 @@ class ImageListItem extends StatelessWidget {
               child: StatefullFavoriteButton(isFavorite),
             )
           ],
-        ));
+        )),
+    );
   }
 }
 

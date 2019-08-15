@@ -1,5 +1,6 @@
 
 import 'dart:math';
+import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:our_mars/resources/strings.dart';
@@ -250,19 +251,21 @@ class SemiRoundedBorderContainer extends StatelessWidget {
       width: double.infinity,
       child: ClipRect(
         clipper: new SemiRoundedBorderClipper(borderSide.width + 1.0),
-        child: new DecoratedBox(
-          decoration: new ShapeDecoration(
-            color: background,
-            shape: new RoundedRectangleBorder(
-              side: borderSide,
-              borderRadius: new BorderRadius.only(
-                topLeft: radius,
-                topRight: radius,
+        child: BackdropFilter(
+          filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
+          child:  new DecoratedBox(
+            decoration: new ShapeDecoration(
+              shape: new RoundedRectangleBorder(
+                side: borderSide,
+                borderRadius: new BorderRadius.only(
+                  topLeft: radius,
+                  topRight: radius,
+                ),
               ),
             ),
+            child: child,
           ),
-          child: child,
-        ),
+        )
       ),
     );
   }

@@ -1,16 +1,27 @@
 import 'package:flutter/material.dart';
+import 'package:our_mars/data/model/models.dart';
 import 'package:our_mars/resources/colors.dart';
 import 'package:our_mars/resources/strings.dart';
 import 'package:our_mars/resources/style.dart';
 
 class ScreenPhoto extends StatefulWidget {
+  final PhotoModel photoModel;
+
+  const ScreenPhoto({Key key, @required this.photoModel}) : super(key: key);
+
   @override
-  State<StatefulWidget> createState() => ScreenPhotoState();
+  State<StatefulWidget> createState() => ScreenPhotoState(photoModel);
 }
 
 class ScreenPhotoState extends State {
+  final PhotoModel photoModel;
+
+  ScreenPhotoState(this.photoModel);
+  
   @override
   Widget build(BuildContext context) {
+    print(photoModel.id.toString());
+    print(photoModel.roverType.toString());
     return Scaffold(
         backgroundColor: AppColors.colorBackground,
 /*      body: SafeArea(
@@ -25,19 +36,18 @@ class ScreenPhotoState extends State {
               padding: EdgeInsets.only(left: 32.0, top: 16.0),
               child: Row(
                 children: <Widget>[
-                  Text(AppStrings.screen_photo_title,
+                  Text(photoModel.roverType,
                       style: AppStyles.text_style_title)
                 ],
               )),
           Container(
-              height: 350.0,
-              width: 350.0,
+              height: 400.0,
               margin: EdgeInsets.all(16.0),
               decoration: BoxDecoration(
                 image: DecorationImage(
                     fit: BoxFit.fill,
                     image: NetworkImage(
-                        'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRVIYGyyRdAGJ5N5WISIeinevCUezLB9MwJCE01hmh5ZJBls9ZM')),
+                        photoModel.imageUrl)),
                 borderRadius: BorderRadius.all(Radius.circular(10.0)),
                 color: Colors.redAccent,
               )),
@@ -45,7 +55,7 @@ class ScreenPhotoState extends State {
               padding: EdgeInsets.only(left: 32.0, top: 16.0),
               child: Row(
                 children: <Widget>[
-                  Text('Front Hazard Avoidance Camera',
+                  Text(photoModel.camera,
                       style: AppStyles.text_style_default),
                 ],
               )),
@@ -53,7 +63,7 @@ class ScreenPhotoState extends State {
               padding: EdgeInsets.only(left: 32.0, top: 16.0),
               child: Row(
                 children: <Widget>[
-                  Text('sol: 1004',
+                  Text('sol: ' + photoModel.sol.toString(),
                       style: AppStyles.text_style_default),
                 ],
               )),
@@ -61,7 +71,7 @@ class ScreenPhotoState extends State {
               padding: EdgeInsets.only(left: 32.0, top: 16.0),
               child: Row(
                 children: <Widget>[
-                  Text('2015-06-03',
+                  Text(photoModel.earthDate,
                       style: AppStyles.text_style_default),
                 ],
               ))

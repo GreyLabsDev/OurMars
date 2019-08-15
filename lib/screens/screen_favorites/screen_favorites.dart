@@ -5,6 +5,7 @@ import 'package:our_mars/resources/colors.dart';
 import 'package:our_mars/resources/strings.dart';
 import 'package:our_mars/resources/style.dart';
 import 'package:our_mars/screens/screen_favorites/widgets_favorites.dart';
+import 'package:our_mars/screens/screen_main/widgets_main.dart';
 
 class ScreenFavorites extends StatefulWidget {
   @override
@@ -35,12 +36,14 @@ class ScreenFavoritesState extends State {
               backgroundColor: AppColors.colorBackground,
             ),
             FutureBuilder<List<PhotoModel>>(
-                    future: NasaApi().getPhotos(),
+                    future: new NasaApi().getPhotos("2009-3-2", RoverType.Sprit),
                     builder: (BuildContext context, AsyncSnapshot snapshot) {
                       if (snapshot.hasData) {
-                        return ImageListGrid(photos: snapshot.data,);
+                        if ((snapshot.data as List<PhotoModel>).length > 0) {
+                          return ImageListGrid(photos: snapshot.data,);
+                        } else return SliverList(delegate: SliverChildListDelegate([Text("No photo in favorites", style: AppStyles.text_style_default,)]),);
                       } else if (snapshot.hasError) {
-                        return SliverList(delegate: SliverChildListDelegate([Text("Error", style: AppStyles.text_style_default,)]),); Text("${snapshot.error}");
+                        return SliverList(delegate: SliverChildListDelegate([Text("Error", style: AppStyles.text_style_default,)]),);
                       }
                       return SliverList(delegate: SliverChildListDelegate([Text("Loading...", style: AppStyles.text_style_default,)]),);
                     },
