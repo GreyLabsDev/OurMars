@@ -88,6 +88,19 @@ class NasaApi {
       photos.forEach((photo) {
         photo.roverType = RoverType.Curiosity.toString().split(".")[1];
       });
+
+      //todo вынести на слой выше
+      List<PhotoModel> listFavoriteModel =
+          await DBProvider.db.getFavoritePhotos();
+      listFavoriteModel.forEach((itemFavoriteModel) {
+        PhotoModel photoModel = photos.firstWhere(
+            (element) => itemFavoriteModel.id == element.id,
+            orElse: () => null);
+        if (photoModel != null) {
+          photoModel.isFavorite = itemFavoriteModel.isFavorite;
+        }
+      });
+
       return photos;
     } else {
       throw Exception('Failed to load photo');
