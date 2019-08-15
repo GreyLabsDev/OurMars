@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:our_mars/data/api/nasa_api.dart';
+import 'package:our_mars/data/db/Database.dart';
 import 'package:our_mars/data/model/models.dart';
 import 'package:our_mars/resources/colors.dart';
 import 'package:our_mars/resources/strings.dart';
@@ -36,7 +37,7 @@ class ScreenFavoritesState extends State {
               backgroundColor: AppColors.colorBackground,
             ),
             FutureBuilder<List<PhotoModel>>(
-                    future: new NasaApi().getPhotos("2005-2-2", RoverType.Sprit),
+                    future: DBProvider.db.getFavoritePhotos(),
                     builder: (BuildContext context, AsyncSnapshot snapshot) {
                       if (snapshot.hasData) {
                         if ((snapshot.data as List<PhotoModel>).length > 0) {
