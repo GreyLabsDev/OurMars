@@ -119,12 +119,15 @@ class StatefulYearSelectorWidgetState extends State {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      children: <Widget>[
-        Text(yearString, style: AppStyles.text_style_year,),
-        SizedBox(width: 8.0,),
-        Icon(Icons.arrow_drop_down, color: Colors.white,)
-      ],
+    return GestureDetector(
+      onTap: onTap,
+      child: Row(
+        children: <Widget>[
+          Text(yearString, style: AppStyles.text_style_year,),
+          SizedBox(width: 8.0,),
+          Icon(Icons.arrow_drop_down, color: Colors.white,)
+        ],
+      ),
     );
   }
 }

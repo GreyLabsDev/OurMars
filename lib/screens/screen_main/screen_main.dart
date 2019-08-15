@@ -81,7 +81,13 @@ class ScreenMainState extends State with SingleTickerProviderStateMixin {
                       padding: EdgeInsets.only(left: 32.0),
                       child: StatefulYearSelectorWidget(
                         yearString: "2019",
-                        onTap: () {},
+                        onTap: () {
+                          showDialog(
+                            builder: (BuildContext context) {
+                              return YearSelectorDialog();
+                            }, context: context,
+                          );
+                        },
                       ),
                     ),
                     SizedBox(height: 16.0,),
@@ -113,6 +119,89 @@ class ScreenMainState extends State with SingleTickerProviderStateMixin {
         )
       ),
     );
+  }
+}
+
+class YearSelectorDialog extends Dialog {
+  @override
+  Widget build(BuildContext context) {
+
+    var yearsList = new List<Text>();
+    var begin = 2004;
+    var end = 2020;
+    for (var i = begin; i < end; i++ ) {
+      yearsList.add(Text(i.toString(), style: AppStyles.text_style_default,));
+    }
+
+    return Dialog(
+      shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(16.0),
+      ),      
+      elevation: 0.0,
+      backgroundColor: Colors.transparent,
+      child: Container(
+              height: 250,
+              decoration: BoxDecoration(
+                border: Border.all(color: Colors.white, width: 1.0),
+                color: Colors.black,
+                borderRadius: BorderRadius.circular(16.0)
+              ),
+              child: Stack(
+                children: <Widget>[
+                  Align(
+                    alignment: Alignment.topCenter,
+                    child: Padding(
+                      padding: EdgeInsets.only(top: 16.0),
+                      child: Text("Select year", style: AppStyles.text_style_title,),
+                    )
+                  ),
+                  Align(
+                    alignment: Alignment.bottomCenter,
+                    child: Padding(
+                      padding: EdgeInsets.only(bottom: 16.0, left: 64.0, right: 64.0),
+                      child: Row(
+                        children: <Widget>[
+                          GestureDetector(
+                            onTap: () {
+                              Navigator.pop(context);
+                            },
+                            child: Text("Back", style: AppStyles.text_style_default,),
+                          ),
+                          Spacer(),
+                          InkWell(
+                            onTap: () {
+                              Navigator.pop(context);
+                            },
+                            child: Text("OK", style: AppStyles.text_style_default,),
+                          )
+                        ],
+                      )
+                    )
+                  ),
+                  ListWheelScrollView.useDelegate(
+                    diameterRatio: 0.4,
+                    useMagnifier: true,
+                    magnification: 2,
+                    itemExtent: 32.0,
+                    childDelegate: ListWheelChildLoopingListDelegate(
+                      children: yearsList,
+                    ),
+                  ),
+                ],
+              ) 
+            ),
+    );
+  }
+}
+
+class StatelessYearDialog extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+                width: 250.0,
+                height: 150.0,
+                child:  Text("Dialog", style: AppStyles.text_style_default,),
+              );
   }
 }
 
