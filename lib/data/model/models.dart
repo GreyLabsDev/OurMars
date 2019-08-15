@@ -14,7 +14,7 @@ class PhotoModel {
   final int sol;
   final String imageUrl;
   final String earthDate;
-  final CameraModel camera;
+  final String camera;
 
   PhotoModel({this.sol, this.imageUrl, this.earthDate, this.camera});
 
@@ -23,7 +23,7 @@ class PhotoModel {
       sol: json['sol'],
       imageUrl: json['img_src'],
       earthDate: json['2015-06-03'],
-      camera: CameraModel.fromJson(json['camera'])
+      camera: CameraModel.fromJson(json['camera']).cameraName
     );
   }
   
