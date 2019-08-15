@@ -9,6 +9,7 @@ import 'package:our_mars/resources/style.dart';
 import 'package:our_mars/screens/screen_about/screen_about.dart';
 import 'package:our_mars/screens/screen_favorites/screen_favorites.dart';
 import 'package:our_mars/screens/screen_favorites/widgets_favorites.dart';
+import 'package:our_mars/screens/screen_main/block_main.dart';
 
 import 'widgets_main.dart';
 
@@ -18,9 +19,24 @@ class ScreenMain extends StatefulWidget {
 }
 
 class ScreenMainState extends State with SingleTickerProviderStateMixin {
+  MainScreenBlock block;
+
   final GlobalKey<ScaffoldState> scaffoldKey = new GlobalKey<ScaffoldState>();
   var isBottomSheetOpened = false;
   PersistentBottomSheetController bottomSheetMenuController;
+
+  @override
+  void initState() {
+    block = MainScreenBlock();
+    super.initState();
+    block.loadPhotos();
+  }
+
+  @override
+  void dispose() {
+    block.dispose();
+    super.dispose();
+  }
 
   void showBottomSheetMenu() {
     // if (isBottomSheetOpened) {
@@ -97,18 +113,26 @@ class ScreenMainState extends State with SingleTickerProviderStateMixin {
                 ),
                 SliverPadding(
                   padding: EdgeInsets.only(left: 16.0, right: 16.0),
-                  sliver: FutureBuilder<List<PhotoModel>>(
-                    future: NasaApi().getPhotosTest(),
+                  sliver: StreamBuilder<PhotoGridState>(
+                    stream: block.photoGridState,
+                    initialData: PhotoGridInitialState(),
                     builder: (BuildContext context, AsyncSnapshot snapshot) {
-                      if (snapshot.hasData) {
-                        if ((snapshot.data as List<PhotoModel>).length > 0) {
-                          return ImageListGrid(photos: snapshot.data,);
-                        } else return SliverList(delegate: SliverChildListDelegate([Text("No photo for this time", style: AppStyles.text_style_default,)]),);
-                      } else if (snapshot.hasError) {
-                        print(snapshot.error.toString());
-                        return SliverList(delegate: SliverChildListDelegate([Text("Error", style: AppStyles.text_style_default,)]),); Text("${snapshot.error}");
+                      if (snapshot.data is PhotoGridInitialState) {
+                        return SliverList(delegate: SliverChildListDelegate([Text("Initial", style: AppStyles.text_style_default,)]),);
                       }
-                      return SliverList(delegate: SliverChildListDelegate([Text("Loading...", style: AppStyles.text_style_default,)]),);
+                      if (snapshot.data is PhotoGridLoadingState) {
+                        return SliverList(delegate: SliverChildListDelegate([Text("Loading...", style: AppStyles.text_style_default,)]),);
+                      }
+                      if (snapshot.data is PhotoGridDataState) {
+                        PhotoGridDataState state = snapshot.data;
+                        if (state.photos.length > 0) {
+                          return ImageListGrid(photos: state.photos,);
+                        } else return SliverList(delegate: SliverChildListDelegate([Text("No photo for this time", style: AppStyles.text_style_default,)]),);
+                      }
+                      if (snapshot.data is PhotoGridErrorState) {
+                        return SliverList(delegate: SliverChildListDelegate([Text("Error", style: AppStyles.text_style_default,)]),);
+                      }
+                      
                     },
                   ),
                 )
@@ -155,6 +179,16 @@ class YearSelectorDialog extends Dialog {
                       child: Text("Select year", style: AppStyles.text_style_title,),
                     )
                   ),
+                  
+                  ListWheelScrollView.useDelegate(
+                    diameterRatio: 0.4,
+                    useMagnifier: true,
+                    magnification: 2,
+                    itemExtent: 32.0,
+                    childDelegate: ListWheelChildLoopingListDelegate(
+                      children: yearsList,
+                    ),
+                  ),
                   Align(
                     alignment: Alignment.bottomCenter,
                     child: Padding(
@@ -177,16 +211,7 @@ class YearSelectorDialog extends Dialog {
                         ],
                       )
                     )
-                  ),
-                  ListWheelScrollView.useDelegate(
-                    diameterRatio: 0.4,
-                    useMagnifier: true,
-                    magnification: 2,
-                    itemExtent: 32.0,
-                    childDelegate: ListWheelChildLoopingListDelegate(
-                      children: yearsList,
-                    ),
-                  ),
+                  )
                 ],
               ) 
             ),
