@@ -129,6 +129,10 @@ class StatefulYearSelectorWidgetState extends State {
   final Function() onTap;
 
   StatefulYearSelectorWidgetState(this.yearString, this.onTap);
+  @override
+  void setState(fn) {
+    super.setState(fn);
+  }
 
   void updateYear(String newYearString) {
     yearString = newYearString;

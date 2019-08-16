@@ -50,6 +50,7 @@ class ScreenMainState extends State with SingleTickerProviderStateMixin, RouteAw
 
   void updateYearString(int selectedYearIndex){
     var year = GlobalData().getAvailableYears()[selectedYearIndex ?? 0];
+    selectedYear = year;
     yearSelectorKey.currentState.updateYear(year);
     blocRoverPhotos.setDateYear(year);
   }

@@ -33,53 +33,58 @@ class ScreenFavoritesState extends State {
       backgroundColor: AppColors.colorBackground,
       body: SafeArea(
           child: Padding(
-        padding: EdgeInsets.all(32.0),
+            padding: EdgeInsets.all(16.0),
         /* child: Text(AppStrings.screen_favorites_title, style: AppStyles.text_style_title,),*/
-        child: CustomScrollView(
-          slivers: <Widget>[
-            SliverAppBar(
-              title: Text(
-                AppStrings.screen_favorites_title,
-                style: AppStyles.text_style_title,
-              ),
-              leading: IconButton(
-                icon: Icon(Icons.arrow_back),
-                onPressed: () => Navigator.pop(context, false),
-              ),
-              pinned: true,
-              backgroundColor: AppColors.colorBackground,
+            child: CustomScrollView(  
+              slivers: <Widget>[
+                SliverList(
+                  delegate: SliverChildListDelegate([
+                    Padding(
+                      padding: EdgeInsets.only(bottom: 16.0),
+                      child: Row(
+                      children: <Widget>[
+                          GestureDetector(
+                            onTap: () {Navigator.pop(context);},
+                            child: Icon(Icons.arrow_back, color: Colors.white,),
+                          ),
+                          SizedBox(width: 16.0,),
+                          Text(AppStrings.screen_favorites_title, style: AppStyles.text_style_title,),
+                        ],
+                      ),
+                    )
+                  ]),
+                ),
+                StreamBuilder<BlocRoverPhotosState>(
+                        stream: roverPhotosBloc.roverPhotosState,
+                        initialData: BlocRoverPhotosStateInitial(),
+                        builder: (BuildContext context, AsyncSnapshot snapshot) {
+                          if (snapshot.data is BlocRoverPhotosStateInitial) {
+                            return SliverList(delegate: SliverChildListDelegate([Text("Initial", style: AppStyles.text_style_default,)]),);
+                          }
+                          if (snapshot.data is BlocRoverPhotosStateLoading) {
+                            return SliverList(delegate: SliverChildListDelegate([Text("Loading...", style: AppStyles.text_style_default,)]),);
+                          }
+                          if (snapshot.data is BlocRoverPhotosStateData) {
+                            BlocRoverPhotosStateData state = snapshot.data;
+                            if (state.photos.length > 0) {
+                              return ImageListGrid(
+                                  photos: state.photos,
+                                  onPhotoFavoritePressed: (isFavorite, photo) {
+                                    roverPhotosBloc.removeFavoritePhotoAndReload(photo);
+                                  },
+                                );
+                            } else return SliverList(delegate: SliverChildListDelegate([Text("No photo in favorites", style: AppStyles.text_style_default,)]),);
+                          }
+                          if (snapshot.data is BlocRoverPhotosStateError) {
+                            BlocRoverPhotosStateError state = snapshot.data;
+                            return SliverList(delegate: SliverChildListDelegate([Text(state.errorMessage, style: AppStyles.text_style_default,)]),);
+                          }
+                        },
+                      ),
+              ],
             ),
-            StreamBuilder<BlocRoverPhotosState>(
-                    stream: roverPhotosBloc.roverPhotosState,
-                    initialData: BlocRoverPhotosStateInitial(),
-                    builder: (BuildContext context, AsyncSnapshot snapshot) {
-                      if (snapshot.data is BlocRoverPhotosStateInitial) {
-                        return SliverList(delegate: SliverChildListDelegate([Text("Initial", style: AppStyles.text_style_default,)]),);
-                      }
-                      if (snapshot.data is BlocRoverPhotosStateLoading) {
-                        return SliverList(delegate: SliverChildListDelegate([Text("Loading...", style: AppStyles.text_style_default,)]),);
-                      }
-                      if (snapshot.data is BlocRoverPhotosStateData) {
-                        BlocRoverPhotosStateData state = snapshot.data;
-                        if (state.photos.length > 0) {
-                          return ImageListGrid(
-                              photos: state.photos,
-                              onPhotoFavoritePressed: (isFavorite, photo) {
-                                roverPhotosBloc.removeFavoritePhotoAndReload(photo);
-                              },
-                            );
-                        } else return SliverList(delegate: SliverChildListDelegate([Text("No photo for this time", style: AppStyles.text_style_default,)]),);
-                      }
-                      if (snapshot.data is BlocRoverPhotosStateError) {
-                        BlocRoverPhotosStateError state = snapshot.data;
-                        return SliverList(delegate: SliverChildListDelegate([Text(state.errorMessage, style: AppStyles.text_style_default,)]),);
-                      }
-                    },
-                  ),
-          ],
-        ),
-      )),
-    );
-  }
+          )),
+        );
+      }
 }
 

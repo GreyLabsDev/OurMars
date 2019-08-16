@@ -27,4 +27,20 @@ class AppStrings {
     "Nov",
     "Dec",
   ];
+
+  static const screen_about_text = "\"OurMars\" app can help you to see photos taken from Mars."
+  + " All data is fething directly from NASA database."
+  + "\n\nThis is example Flutter application"
+  + "\ncreated by two mobile developers in 4 work days."
+  + " \n\nGoal of this project is learning base concepts of Flutter, "
+  + "BLoC pattern, asyncronous and background tasks in Dart/Flutter, "
+  + "available stable libraries."
+  + "\n\nUsed libraries:"
+  + "\n- http"
+  + "\n- sqflite"
+  + "\n- path_provider"
+  + "\n- url_launcher"
+  + "\n\nSource code is fully open and you can get it here:";
+
+  static const screen_about_contributors = "Application developed by:";
 }

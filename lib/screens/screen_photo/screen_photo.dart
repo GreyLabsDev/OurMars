@@ -24,18 +24,17 @@ class ScreenPhotoState extends State {
     print(photoModel.roverType.toString());
     return Scaffold(
         backgroundColor: AppColors.colorBackground,
-/*      body: SafeArea(
-        child: Padding(
-          padding: EdgeInsets.all(32.0),
-          child: Text(AppStrings.screen_photo_title, style: AppStyles.text_style_title,),
-        )
-      ),*/
         body: SafeArea(
             child: Column(children: <Widget>[
           Padding(
               padding: EdgeInsets.only(left: 32.0, top: 16.0),
               child: Row(
                 children: <Widget>[
+                  GestureDetector(
+                    onTap: () {Navigator.pop(context);},
+                    child: Icon(Icons.arrow_back, color: Colors.white,),
+                  ),
+                  SizedBox(width: 16.0,),
                   Text(photoModel.roverType,
                       style: AppStyles.text_style_title)
                 ],
