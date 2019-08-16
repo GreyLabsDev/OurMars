@@ -39,7 +39,24 @@ class RoversPhotoRepository extends Repository {
 
   @override
   Future<List<PhotoModel>> getRoverPhotos(String date, RoverType roverType) {
-    return api.getPhotos(date, roverType);
+    List<PhotoModel> loadedPhotos = [];
+    return api.getPhotos(date, roverType)
+    .then((photos) {
+      loadedPhotos = photos;
+      return dbProvider.getAllPhotos();
+    })
+    .then((photosFromDb) {
+      photosFromDb.forEach((favoritePhoto) {
+        PhotoModel photoModel = loadedPhotos.firstWhere(
+            (element) => favoritePhoto.id == element.id,
+            orElse: () => null);
+        if (photoModel != null) {
+          photoModel.isFavorite = favoritePhoto.isFavorite;
+        }
+      });
+      return Future<List<PhotoModel>>.value(loadedPhotos);
+    });
+    
   }
   
 }

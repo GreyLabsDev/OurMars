@@ -3,6 +3,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:our_mars/bloc/block_rover_photo.dart';
 import 'package:our_mars/data/repository/repository.dart';
+import 'package:our_mars/global/global_data.dart';
+import 'package:our_mars/main.dart';
 import 'package:our_mars/resources/colors.dart';
 import 'package:our_mars/resources/strings.dart';
 import 'package:our_mars/resources/style.dart';
@@ -17,23 +19,40 @@ class ScreenMain extends StatefulWidget {
   State<StatefulWidget> createState() => ScreenMainState();
 }
 
-class ScreenMainState extends State with SingleTickerProviderStateMixin {
-  BlocRoverPhotos roverPhotosBloc;
+class ScreenMainState extends State with SingleTickerProviderStateMixin, RouteAware {
+  BlocRoverPhotos blocRoverPhotos;
 
   final GlobalKey<ScaffoldState> scaffoldKey = new GlobalKey<ScaffoldState>();
   PersistentBottomSheetController bottomSheetMenuController;
 
   @override
   void initState() {
-    roverPhotosBloc = BlocRoverPhotos(RoversPhotoRepository());
+    blocRoverPhotos = BlocRoverPhotos(RoversPhotoRepository());
     super.initState();
-    roverPhotosBloc.getRoverPhotos();
+    blocRoverPhotos.getRoverPhotos();
   }
 
   @override
   void dispose() {
-    roverPhotosBloc.dispose();
+    blocRoverPhotos.dispose();
+    routeObserver.unsubscribe(this);
     super.dispose();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    routeObserver.subscribe(this, ModalRoute.of(context));
+  }
+
+  @override
+  void didPopNext() {
+    print("didPopNext");
+    super.didPopNext();
+    if (GlobalData().getFavoritesIsNeedUpdateStatus()) {
+      blocRoverPhotos.getRoverPhotos();
+      GlobalData().setFavoritesIsNeedUpdateStatus(false);
+    }
   }
 
   void showBottomSheetMenu() {
@@ -86,7 +105,7 @@ class ScreenMainState extends State with SingleTickerProviderStateMixin {
                     SizedBox(height: 32.0,),
                     StatelessRoversPager(
                       onRoverPageChanged: (rover) {
-                        roverPhotosBloc.setRoverType(rover);
+                        blocRoverPhotos.setRoverType(rover);
                       },
                     ),
                     SizedBox(height: 16.0,),
@@ -111,7 +130,7 @@ class ScreenMainState extends State with SingleTickerProviderStateMixin {
                 SliverPadding(
                   padding: EdgeInsets.only(left: 16.0, right: 16.0),
                   sliver: StreamBuilder<BlocRoverPhotosState>(
-                    stream: roverPhotosBloc.roverPhotosState,
+                    stream: blocRoverPhotos.roverPhotosState,
                     initialData: BlocRoverPhotosStateInitial(),
                     builder: (BuildContext context, AsyncSnapshot snapshot) {
                       if (snapshot.data is BlocRoverPhotosStateInitial) {
@@ -126,7 +145,7 @@ class ScreenMainState extends State with SingleTickerProviderStateMixin {
                           return ImageListGrid(
                               photos: state.photos, 
                               onPhotoFavoritePressed: (isFavorite, photo) {
-                                roverPhotosBloc.addOrRemoveFavoritePhoto(isFavorite, photo);
+                                blocRoverPhotos.addOrRemoveFavoritePhoto(isFavorite, photo);
                               },
                             );
                         } else return SliverList(delegate: SliverChildListDelegate([Text("No photo for this time", style: AppStyles.text_style_default,)]),);
