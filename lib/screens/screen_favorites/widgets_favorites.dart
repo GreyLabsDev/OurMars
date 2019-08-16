@@ -1,17 +1,18 @@
 import 'package:flutter/material.dart';
-import 'package:our_mars/data/db/Database.dart';
+import 'package:our_mars/data/db/database.dart';
 import 'package:our_mars/data/model/models.dart';
 import 'package:our_mars/screens/screen_photo/screen_photo.dart';
 
 class ImageListGrid extends StatelessWidget {
   final List<PhotoModel> photos;
+  Function(bool isFavorite, PhotoModel photoFavoritePressed) onPhotoFavoritePressed;
 
-  const ImageListGrid({Key key, @required this.photos}) : super(key: key);
+  ImageListGrid({Key key, @required this.photos, this.onPhotoFavoritePressed}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     var imageItems =
-        photos.map((model) => ImageListItem(photoModel: model)).toList();
+        photos.map((model) => ImageListItem(photoModel: model, onPhotoFavoritePressed: onPhotoFavoritePressed,)).toList();
     return SliverGrid.count(
       crossAxisCount: 3,
       children: imageItems,
@@ -21,8 +22,9 @@ class ImageListGrid extends StatelessWidget {
 
 class ImageListItem extends StatelessWidget {
   final PhotoModel photoModel;
+  Function(bool isFavorite, PhotoModel photoFavoritePressed) onPhotoFavoritePressed;
 
-  ImageListItem({Key key, this.photoModel}) : super(key: key);
+  ImageListItem({Key key, this.photoModel, this.onPhotoFavoritePressed}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -49,7 +51,7 @@ class ImageListItem extends StatelessWidget {
               Positioned(
                 bottom: 8,
                 left: 8,
-                child: StatefullFavoriteButton(photoModel),
+                child: StatefulFavoriteButton(photoModel,onPhotoFavoritePressed),
               )
             ],
           )),
@@ -57,21 +59,23 @@ class ImageListItem extends StatelessWidget {
   }
 }
 
-class StatefullFavoriteButton extends StatefulWidget {
+class StatefulFavoriteButton extends StatefulWidget {
   PhotoModel photoModel;
+  Function(bool isFavorite, PhotoModel photoFavoritePressed) onPhotoFavoritePressed;
 
-  StatefullFavoriteButton(this.photoModel);
+  StatefulFavoriteButton(this.photoModel, this.onPhotoFavoritePressed);
 
   @override
   State<StatefulWidget> createState() =>
-      StatefullFavoriteButtonState(photoModel);
+      StatefullFavoriteButtonState(photoModel, onPhotoFavoritePressed);
 }
 
 class StatefullFavoriteButtonState extends State {
   PhotoModel photoModel;
   bool isFavorite = false;
+  Function(bool isFavorite, PhotoModel photoFavoritePressed) onPhotoFavoritePressed;
 
-  StatefullFavoriteButtonState(this.photoModel);
+  StatefullFavoriteButtonState(this.photoModel, this.onPhotoFavoritePressed);
 
   @override
   void initState() {
@@ -82,19 +86,16 @@ class StatefullFavoriteButtonState extends State {
     super.initState();
   }
 
-  void updatePhotoInDB() async {
-    DBProvider.db.insertPhotoModel(photoModel);
-  }
-
-
   void onFavoritePressed() {
     isFavorite = !isFavorite;
-    if (isFavorite) {
-      photoModel.isFavorite = 1;
-    } else
-      photoModel.isFavorite = 0;
-
-    updatePhotoInDB();
+    onPhotoFavoritePressed(isFavorite, photoModel);
+    // if (isFavorite) {
+    //   photoModel.isFavorite = 1;
+    //   DBProvider.db.insertPhotoModel(photoModel);
+    // } else {
+    //   photoModel.isFavorite = 0;
+    //   DBProvider.db.deletePhotoById(photoModel.id);
+    // }
 
     setState(() {});
   }

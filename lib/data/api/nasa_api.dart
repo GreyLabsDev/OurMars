@@ -20,6 +20,12 @@ class NasaApi {
   final nasa_api_key = "K3HSuWeGPWudvgynhcmu6BLm1dy4aOoDCdaysa6M";
 
   static final apiInstance = new NasaApi.makeInstance();
+  
+  NasaApi.makeInstance();
+
+  factory NasaApi() {
+    return apiInstance;
+  }
 
   static final mockModels = [
     PhotoModel(
@@ -65,13 +71,7 @@ class NasaApi {
       camera: "NASD",
     ),
   ];
-
-  NasaApi.makeInstance();
-
-  factory NasaApi() {
-    return apiInstance;
-  }
-
+  
   Future<List<PhotoModel>> getPhotosTest() async {
     var reqBuilder = RequestBuilder();
     reqBuilder
@@ -91,7 +91,7 @@ class NasaApi {
 
       //todo вынести на слой выше
       List<PhotoModel> listFavoriteModel =
-          await DBProvider.db.getFavoritePhotos();
+          await DBProvider.db.getAllPhotos();
       listFavoriteModel.forEach((itemFavoriteModel) {
         PhotoModel photoModel = photos.firstWhere(
             (element) => itemFavoriteModel.id == element.id,

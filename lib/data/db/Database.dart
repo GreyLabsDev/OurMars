@@ -60,14 +60,6 @@ class DBProvider {
     return res.isNotEmpty ? PhotoModel.fromMap(res.first) : null;
   }
 
-  Future<List<PhotoModel>> getFavoritePhotos() async {
-    final db = await database;
-    var res = await db.query("Photos", where: "is_favorite = 1");
-    List<PhotoModel> list =
-    res.isNotEmpty ? res.map((c) => PhotoModel.fromMap(c)).toList() : [];
-    return list;
-  }
-
 
   Future<List<PhotoModel>> getAllPhotos() async {
     final db = await database;

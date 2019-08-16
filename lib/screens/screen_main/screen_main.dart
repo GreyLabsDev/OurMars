@@ -1,15 +1,14 @@
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:our_mars/data/api/nasa_api.dart';
-import 'package:our_mars/data/model/models.dart';
+import 'package:our_mars/bloc/block_rover_photo.dart';
+import 'package:our_mars/data/repository/repository.dart';
 import 'package:our_mars/resources/colors.dart';
 import 'package:our_mars/resources/strings.dart';
 import 'package:our_mars/resources/style.dart';
 import 'package:our_mars/screens/screen_about/screen_about.dart';
 import 'package:our_mars/screens/screen_favorites/screen_favorites.dart';
 import 'package:our_mars/screens/screen_favorites/widgets_favorites.dart';
-import 'package:our_mars/screens/screen_main/block_main.dart';
 
 import 'widgets_main.dart';
 
@@ -19,7 +18,7 @@ class ScreenMain extends StatefulWidget {
 }
 
 class ScreenMainState extends State with SingleTickerProviderStateMixin {
-  MainScreenBlock block;
+  BlocRoverPhotos roverPhotosBloc;
 
   final GlobalKey<ScaffoldState> scaffoldKey = new GlobalKey<ScaffoldState>();
   var isBottomSheetOpened = false;
@@ -27,14 +26,14 @@ class ScreenMainState extends State with SingleTickerProviderStateMixin {
 
   @override
   void initState() {
-    block = MainScreenBlock();
+    roverPhotosBloc = BlocRoverPhotos(RoversPhotoRepository());
     super.initState();
-    block.loadPhotos();
+    roverPhotosBloc.getRoverPhotos();
   }
 
   @override
   void dispose() {
-    block.dispose();
+    roverPhotosBloc.dispose();
     super.dispose();
   }
 
@@ -113,26 +112,31 @@ class ScreenMainState extends State with SingleTickerProviderStateMixin {
                 ),
                 SliverPadding(
                   padding: EdgeInsets.only(left: 16.0, right: 16.0),
-                  sliver: StreamBuilder<PhotoGridState>(
-                    stream: block.photoGridState,
-                    initialData: PhotoGridInitialState(),
+                  sliver: StreamBuilder<BlocRoverPhotosState>(
+                    stream: roverPhotosBloc.roverPhotosState,
+                    initialData: BlocRoverPhotosStateInitial(),
                     builder: (BuildContext context, AsyncSnapshot snapshot) {
-                      if (snapshot.data is PhotoGridInitialState) {
+                      if (snapshot.data is BlocRoverPhotosStateInitial) {
                         return SliverList(delegate: SliverChildListDelegate([Text("Initial", style: AppStyles.text_style_default,)]),);
                       }
-                      if (snapshot.data is PhotoGridLoadingState) {
+                      if (snapshot.data is BlocRoverPhotosStateLoading) {
                         return SliverList(delegate: SliverChildListDelegate([Text("Loading...", style: AppStyles.text_style_default,)]),);
                       }
-                      if (snapshot.data is PhotoGridDataState) {
-                        PhotoGridDataState state = snapshot.data;
+                      if (snapshot.data is BlocRoverPhotosStateData) {
+                        BlocRoverPhotosStateData state = snapshot.data;
                         if (state.photos.length > 0) {
-                          return ImageListGrid(photos: state.photos,);
+                          return ImageListGrid(
+                              photos: state.photos, 
+                              onPhotoFavoritePressed: (isFavorite, photo) {
+                                roverPhotosBloc.addOrRemoveFavoritePhoto(isFavorite, photo);
+                              },
+                            );
                         } else return SliverList(delegate: SliverChildListDelegate([Text("No photo for this time", style: AppStyles.text_style_default,)]),);
                       }
-                      if (snapshot.data is PhotoGridErrorState) {
-                        return SliverList(delegate: SliverChildListDelegate([Text("Error", style: AppStyles.text_style_default,)]),);
+                      if (snapshot.data is BlocRoverPhotosStateError) {
+                        BlocRoverPhotosStateError state = snapshot.data;
+                        return SliverList(delegate: SliverChildListDelegate([Text(state.errorMessage, style: AppStyles.text_style_default,)]),);
                       }
-                      
                     },
                   ),
                 )
