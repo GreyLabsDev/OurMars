@@ -74,6 +74,7 @@ class BlocRoverPhotos {
   }
 
   void getRoverPhotos() {
+    streamController.sink.add(BlocRoverPhotosState.loading());
     repository.getRoverPhotos(_generateRequestDateString(), _roverType)
     .catchError((error) {
       streamController.sink.add(BlocRoverPhotosState.error(error.toString()));
