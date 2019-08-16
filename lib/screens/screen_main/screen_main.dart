@@ -37,6 +37,12 @@ class ScreenMainState extends State with SingleTickerProviderStateMixin {
     super.dispose();
   }
 
+  void updateYearString(int selectedYearIndex){
+    setState(() {
+      print(selectedYearIndex.toString());
+    });
+  }
+
   void showBottomSheetMenu() {
     // if (isBottomSheetOpened) {
       // bottomSheetMenuController.close();
@@ -99,7 +105,7 @@ class ScreenMainState extends State with SingleTickerProviderStateMixin {
                         onTap: () {
                           showDialog(
                             builder: (BuildContext context) {
-                              return YearSelectorDialog();
+                              return YearSelectorDialog(pressOkButtonAction: updateYearString);
                             }, context: context,
                           );
                         },
@@ -151,6 +157,12 @@ class ScreenMainState extends State with SingleTickerProviderStateMixin {
 }
 
 class YearSelectorDialog extends Dialog {
+
+  int selectYearIndex;
+  Function(int selectYearIndex) pressOkButtonAction;
+
+  YearSelectorDialog({Key key, this.pressOkButtonAction}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
 
@@ -164,7 +176,7 @@ class YearSelectorDialog extends Dialog {
     return Dialog(
       shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(16.0),
-      ),      
+      ),
       elevation: 0.0,
       backgroundColor: Colors.transparent,
       child: Container(
@@ -183,8 +195,11 @@ class YearSelectorDialog extends Dialog {
                       child: Text("Select year", style: AppStyles.text_style_title,),
                     )
                   ),
-                  
+
                   ListWheelScrollView.useDelegate(
+                    onSelectedItemChanged: (int value){
+                      selectYearIndex = value;
+                    },
                     diameterRatio: 0.4,
                     useMagnifier: true,
                     magnification: 2,
@@ -208,6 +223,8 @@ class YearSelectorDialog extends Dialog {
                           Spacer(),
                           InkWell(
                             onTap: () {
+                              pressOkButtonAction(selectYearIndex);
+                              //print(selectYearIndex + 2004); // select year + 2004 =// actual year
                               Navigator.pop(context);
                             },
                             child: Text("OK", style: AppStyles.text_style_default,),
@@ -217,7 +234,7 @@ class YearSelectorDialog extends Dialog {
                     )
                   )
                 ],
-              ) 
+              )
             ),
     );
   }
