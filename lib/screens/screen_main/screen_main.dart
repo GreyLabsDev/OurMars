@@ -13,7 +13,6 @@ import 'package:our_mars/screens/screen_favorites/screen_favorites.dart';
 import 'package:our_mars/screens/screen_favorites/widgets_favorites.dart';
 import 'widgets_main.dart';
 
-
 class ScreenMain extends StatefulWidget {
   @override
   State<StatefulWidget> createState() => ScreenMainState();
@@ -23,10 +22,20 @@ class ScreenMainState extends State with SingleTickerProviderStateMixin, RouteAw
   BlocRoverPhotos blocRoverPhotos;
 
   final GlobalKey<ScaffoldState> scaffoldKey = new GlobalKey<ScaffoldState>();
+  final GlobalKey<StatefulYearSelectorWidgetState> yearSelectorKey = new GlobalKey<StatefulYearSelectorWidgetState>();
   PersistentBottomSheetController bottomSheetMenuController;
+
+  var selectedYear = "2019";
 
   @override
   void initState() {
+    var begin = 2004;
+    var end = DateTime.now().year;
+    var years = GlobalData().getAvailableYears();
+    for (var i = begin; i <= end; i++ ) {
+      years.add(i.toString());
+    }
+    GlobalData().setAvailableYears(years);
     blocRoverPhotos = BlocRoverPhotos(RoversPhotoRepository());
     super.initState();
     blocRoverPhotos.getRoverPhotos();
@@ -40,11 +49,10 @@ class ScreenMainState extends State with SingleTickerProviderStateMixin, RouteAw
   }
 
   void updateYearString(int selectedYearIndex){
-    setState(() {
-      print(selectedYearIndex.toString());
-    });
+    var year = GlobalData().getAvailableYears()[selectedYearIndex ?? 0];
+    yearSelectorKey.currentState.updateYear(year);
+    blocRoverPhotos.setDateYear(year);
   }
-
 
   @override
   void didChangeDependencies() {
@@ -119,7 +127,8 @@ class ScreenMainState extends State with SingleTickerProviderStateMixin, RouteAw
                     Padding(
                       padding: EdgeInsets.only(left: 32.0),
                       child: StatefulYearSelectorWidget(
-                        yearString: "2019",
+                        key: yearSelectorKey,
+                        yearString: selectedYear,
                         onTap: () {
                           showDialog(
                             builder: (BuildContext context) {
@@ -183,13 +192,12 @@ class YearSelectorDialog extends Dialog {
 
   @override
   Widget build(BuildContext context) {
-
     var yearsList = new List<Text>();
-    var begin = 2004;
-    var end = 2020;
-    for (var i = begin; i < end; i++ ) {
-      yearsList.add(Text(i.toString(), style: AppStyles.text_style_default,));
-    }
+
+    GlobalData().getAvailableYears()
+    .forEach((year) {
+      yearsList.add(Text(year, style: AppStyles.text_style_default,));
+    });
 
     return Dialog(
       shape: RoundedRectangleBorder(

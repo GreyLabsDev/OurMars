@@ -3,6 +3,8 @@ class GlobalData {
   
   GlobalData.makeInstance();
 
+  List<String> _availableYears = [];
+
   factory GlobalData() {
     return globalDataInstance;
   }
@@ -14,4 +16,10 @@ class GlobalData {
   void setFavoritesIsNeedUpdateStatus(bool newStatus) {
     _favoritesIsNeedUpdateStatus = newStatus;
   }
+
+  void setAvailableYears(List<String> years) {
+    _availableYears = years;
+  }
+
+  List<String> getAvailableYears() => _availableYears;
 }

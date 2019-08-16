@@ -14,8 +14,8 @@ class BlocRoverPhotos {
 
   BlocRoverPhotos(this.repository);
 
-  var _dateYear = DateTime.now().year;
-  var _dateMonth = DateTime.now().month;
+  var _dateYear = DateTime.now().year.toString();
+  var _dateMonth = DateTime.now().month.toString();
   var _dateDay = 1;
   var _roverType = RoverType.Curiosity;
 
@@ -25,12 +25,12 @@ class BlocRoverPhotos {
     streamController.close();
   }
 
-  void setDateYear(int year) {
+  void setDateYear(String year) {
     _dateYear = year;
     getRoverPhotos();
   }
 
-  void setDateMonth(int month) {
+  void setDateMonth(String month) {
     _dateMonth = month;
     getRoverPhotos();
   }
@@ -85,7 +85,6 @@ class BlocRoverPhotos {
       streamController.sink.add(BlocRoverPhotosState.data(photos));
     });
   }
-
 }
 
 class BlocRoverPhotosState {
