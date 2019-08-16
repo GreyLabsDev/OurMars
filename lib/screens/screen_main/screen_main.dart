@@ -52,6 +52,11 @@ class ScreenMainState extends State with SingleTickerProviderStateMixin, RouteAw
     var year = GlobalData().getAvailableYears()[selectedYearIndex ?? 0];
     yearSelectorKey.currentState.updateYear(year);
     blocRoverPhotos.setDateYear(year);
+    selectedYear = year;
+  }
+
+  void updateMonthString(int selectedMonthPos){
+    blocRoverPhotos.setDateMonth(selectedMonthPos.toString());
   }
 
   @override
@@ -139,7 +144,7 @@ class ScreenMainState extends State with SingleTickerProviderStateMixin, RouteAw
                       ),
                     ),
                     SizedBox(height: 16.0,),
-                    Container(height: 36.0, child: StatefulMonthChipsGroup(),), 
+                    Container(height: 36.0, child: StatefulMonthChipsGroup(onTap: updateMonthString,),),
                     SizedBox(height: 16.0,),
                   ]),
                 ),
