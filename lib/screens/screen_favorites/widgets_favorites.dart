@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:our_mars/data/db/database.dart';
 import 'package:our_mars/data/model/models.dart';
 import 'package:our_mars/screens/screen_photo/screen_photo.dart';
 
@@ -89,14 +88,6 @@ class StatefullFavoriteButtonState extends State {
   void onFavoritePressed() {
     isFavorite = !isFavorite;
     onPhotoFavoritePressed(isFavorite, photoModel);
-    // if (isFavorite) {
-    //   photoModel.isFavorite = 1;
-    //   DBProvider.db.insertPhotoModel(photoModel);
-    // } else {
-    //   photoModel.isFavorite = 0;
-    //   DBProvider.db.deletePhotoById(photoModel.id);
-    // }
-
     setState(() {});
   }
 

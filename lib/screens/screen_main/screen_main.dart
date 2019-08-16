@@ -9,8 +9,8 @@ import 'package:our_mars/resources/style.dart';
 import 'package:our_mars/screens/screen_about/screen_about.dart';
 import 'package:our_mars/screens/screen_favorites/screen_favorites.dart';
 import 'package:our_mars/screens/screen_favorites/widgets_favorites.dart';
-
 import 'widgets_main.dart';
+
 
 class ScreenMain extends StatefulWidget {
   @override
@@ -21,7 +21,6 @@ class ScreenMainState extends State with SingleTickerProviderStateMixin {
   BlocRoverPhotos roverPhotosBloc;
 
   final GlobalKey<ScaffoldState> scaffoldKey = new GlobalKey<ScaffoldState>();
-  var isBottomSheetOpened = false;
   PersistentBottomSheetController bottomSheetMenuController;
 
   @override
@@ -38,9 +37,6 @@ class ScreenMainState extends State with SingleTickerProviderStateMixin {
   }
 
   void showBottomSheetMenu() {
-    // if (isBottomSheetOpened) {
-      // bottomSheetMenuController.close();
-    // } else {
       bottomSheetMenuController = scaffoldKey.currentState.showBottomSheet(
        (builder) {
            return SemiRoundedBorderContainer(
@@ -60,8 +56,6 @@ class ScreenMainState extends State with SingleTickerProviderStateMixin {
           },
           backgroundColor: Colors.transparent,
       );
-    // }
-    isBottomSheetOpened = !isBottomSheetOpened;
   }
   
   @override
@@ -90,7 +84,11 @@ class ScreenMainState extends State with SingleTickerProviderStateMixin {
                       )
                     ),
                     SizedBox(height: 32.0,),
-                    StatelessRoversPager(),
+                    StatelessRoversPager(
+                      onRoverPageChanged: (rover) {
+                        roverPhotosBloc.setRoverType(rover);
+                      },
+                    ),
                     SizedBox(height: 16.0,),
                     Padding(
                       padding: EdgeInsets.only(left: 32.0),
