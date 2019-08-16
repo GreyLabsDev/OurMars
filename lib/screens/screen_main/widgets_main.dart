@@ -13,21 +13,34 @@ enum RoverType {
 }
 
 class StatelessRoversPager extends StatelessWidget {
+  Function(RoverType type) onRoverPageChanged;
+  
+  StatelessRoversPager({this.onRoverPageChanged});
+  var rovers = [
+    RoverType.Opportunity,
+    RoverType.Curiosity,
+    RoverType.Sprit
+  ];
+  var roversCards = [
+          StatelessRoverCard(roverType: RoverType.Opportunity, padding: EdgeInsets.only(left: 8.0, right: 8.0),),
+          StatelessRoverCard(roverType: RoverType.Curiosity, padding: EdgeInsets.only(left: 8.0, right: 8.0),),
+          StatelessRoverCard(roverType: RoverType.Sprit, padding: EdgeInsets.only(left: 8.0, right: 8.0),),
+  ];
+
   @override
   Widget build(BuildContext context) {
     return Container(
       height: 170.0,
       child: PageView(
+        onPageChanged: (index) {
+          onRoverPageChanged(rovers[index]);
+        },
         scrollDirection: Axis.horizontal,
         controller: PageController(
           initialPage: 1,
           viewportFraction: 0.8
         ),
-        children: <Widget>[
-          StatelessRoverCard(roverType: RoverType.Opportunity, padding: EdgeInsets.only(left: 8.0, right: 8.0),),
-          StatelessRoverCard(roverType: RoverType.Curiosity, padding: EdgeInsets.only(left: 8.0, right: 8.0),),
-          StatelessRoverCard(roverType: RoverType.Sprit, padding: EdgeInsets.only(left: 8.0, right: 8.0),),
-        ],
+        children: roversCards,
       ),
     );
   }

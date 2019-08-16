@@ -1,14 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:our_mars/bloc/block_rover_photo.dart';
-import 'package:our_mars/data/api/nasa_api.dart';
-import 'package:our_mars/data/db/Database.dart';
-import 'package:our_mars/data/model/models.dart';
 import 'package:our_mars/data/repository/repository.dart';
 import 'package:our_mars/resources/colors.dart';
 import 'package:our_mars/resources/strings.dart';
 import 'package:our_mars/resources/style.dart';
 import 'package:our_mars/screens/screen_favorites/widgets_favorites.dart';
-import 'package:our_mars/screens/screen_main/widgets_main.dart';
 
 class ScreenFavorites extends StatefulWidget {
   @override

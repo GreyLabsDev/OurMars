@@ -3,37 +3,39 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:our_mars/bloc/block_rover_photo.dart';
 import 'package:our_mars/data/repository/repository.dart';
+import 'package:our_mars/global/global_data.dart';
+import 'package:our_mars/main.dart';
 import 'package:our_mars/resources/colors.dart';
 import 'package:our_mars/resources/strings.dart';
 import 'package:our_mars/resources/style.dart';
 import 'package:our_mars/screens/screen_about/screen_about.dart';
 import 'package:our_mars/screens/screen_favorites/screen_favorites.dart';
 import 'package:our_mars/screens/screen_favorites/widgets_favorites.dart';
-
 import 'widgets_main.dart';
+
 
 class ScreenMain extends StatefulWidget {
   @override
   State<StatefulWidget> createState() => ScreenMainState();
 }
 
-class ScreenMainState extends State with SingleTickerProviderStateMixin {
-  BlocRoverPhotos roverPhotosBloc;
+class ScreenMainState extends State with SingleTickerProviderStateMixin, RouteAware {
+  BlocRoverPhotos blocRoverPhotos;
 
   final GlobalKey<ScaffoldState> scaffoldKey = new GlobalKey<ScaffoldState>();
-  var isBottomSheetOpened = false;
   PersistentBottomSheetController bottomSheetMenuController;
 
   @override
   void initState() {
-    roverPhotosBloc = BlocRoverPhotos(RoversPhotoRepository());
+    blocRoverPhotos = BlocRoverPhotos(RoversPhotoRepository());
     super.initState();
-    roverPhotosBloc.getRoverPhotos();
+    blocRoverPhotos.getRoverPhotos();
   }
 
   @override
   void dispose() {
-    roverPhotosBloc.dispose();
+    blocRoverPhotos.dispose();
+    routeObserver.unsubscribe(this);
     super.dispose();
   }
 
@@ -43,10 +45,24 @@ class ScreenMainState extends State with SingleTickerProviderStateMixin {
     });
   }
 
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    routeObserver.subscribe(this, ModalRoute.of(context));
+  }
+
+  @override
+  void didPopNext() {
+    print("didPopNext");
+    super.didPopNext();
+    if (GlobalData().getFavoritesIsNeedUpdateStatus()) {
+      blocRoverPhotos.getRoverPhotos();
+      GlobalData().setFavoritesIsNeedUpdateStatus(false);
+    }
+  }
+
   void showBottomSheetMenu() {
-    // if (isBottomSheetOpened) {
-      // bottomSheetMenuController.close();
-    // } else {
       bottomSheetMenuController = scaffoldKey.currentState.showBottomSheet(
        (builder) {
            return SemiRoundedBorderContainer(
@@ -66,8 +82,6 @@ class ScreenMainState extends State with SingleTickerProviderStateMixin {
           },
           backgroundColor: Colors.transparent,
       );
-    // }
-    isBottomSheetOpened = !isBottomSheetOpened;
   }
   
   @override
@@ -96,7 +110,11 @@ class ScreenMainState extends State with SingleTickerProviderStateMixin {
                       )
                     ),
                     SizedBox(height: 32.0,),
-                    StatelessRoversPager(),
+                    StatelessRoversPager(
+                      onRoverPageChanged: (rover) {
+                        blocRoverPhotos.setRoverType(rover);
+                      },
+                    ),
                     SizedBox(height: 16.0,),
                     Padding(
                       padding: EdgeInsets.only(left: 32.0),
@@ -119,7 +137,7 @@ class ScreenMainState extends State with SingleTickerProviderStateMixin {
                 SliverPadding(
                   padding: EdgeInsets.only(left: 16.0, right: 16.0),
                   sliver: StreamBuilder<BlocRoverPhotosState>(
-                    stream: roverPhotosBloc.roverPhotosState,
+                    stream: blocRoverPhotos.roverPhotosState,
                     initialData: BlocRoverPhotosStateInitial(),
                     builder: (BuildContext context, AsyncSnapshot snapshot) {
                       if (snapshot.data is BlocRoverPhotosStateInitial) {
@@ -134,7 +152,7 @@ class ScreenMainState extends State with SingleTickerProviderStateMixin {
                           return ImageListGrid(
                               photos: state.photos, 
                               onPhotoFavoritePressed: (isFavorite, photo) {
-                                roverPhotosBloc.addOrRemoveFavoritePhoto(isFavorite, photo);
+                                blocRoverPhotos.addOrRemoveFavoritePhoto(isFavorite, photo);
                               },
                             );
                         } else return SliverList(delegate: SliverChildListDelegate([Text("No photo for this time", style: AppStyles.text_style_default,)]),);

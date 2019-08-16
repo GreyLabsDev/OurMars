@@ -3,6 +3,7 @@ import 'dart:async';
 
 import 'package:our_mars/data/model/models.dart';
 import 'package:our_mars/data/repository/repository.dart';
+import 'package:our_mars/global/global_data.dart';
 import 'package:our_mars/screens/screen_main/widgets_main.dart';
 
 class BlocRoverPhotos {
@@ -54,6 +55,7 @@ class BlocRoverPhotos {
     if (isFavorite) {
       addFavoritePhoto(photo);
     } else removeFavoritePhoto(photo);
+    
   }
 
   void addFavoritePhoto(PhotoModel photo) {
@@ -66,14 +68,15 @@ class BlocRoverPhotos {
   }
 
   void removeFavoritePhotoAndReload(PhotoModel photo) {
-    streamController.sink.add(BlocRoverPhotosState.loading());
     repository.removeFavoritePhoto(photo)
     .whenComplete((){
       getFavoritePhotos();
     });
+    GlobalData().setFavoritesIsNeedUpdateStatus(true);
   }
 
   void getRoverPhotos() {
+    streamController.sink.add(BlocRoverPhotosState.loading());
     repository.getRoverPhotos(_generateRequestDateString(), _roverType)
     .catchError((error) {
       streamController.sink.add(BlocRoverPhotosState.error(error.toString()));
