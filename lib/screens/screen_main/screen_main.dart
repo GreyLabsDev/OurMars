@@ -25,7 +25,7 @@ class ScreenMainState extends State with SingleTickerProviderStateMixin, RouteAw
   final GlobalKey<StatefulYearSelectorWidgetState> yearSelectorKey = new GlobalKey<StatefulYearSelectorWidgetState>();
   PersistentBottomSheetController bottomSheetMenuController;
 
-  var selectedYear = "2019";
+  var lastRoverIndex = 1;
 
   @override
   void initState() {
@@ -50,10 +50,9 @@ class ScreenMainState extends State with SingleTickerProviderStateMixin, RouteAw
 
   void updateYearString(int selectedYearIndex){
     var year = GlobalData().getAvailableYears()[selectedYearIndex ?? 0];
-    selectedYear = year;
+    GlobalData().setSelectedYear(year);
     yearSelectorKey.currentState.updateYear(year);
     blocRoverPhotos.setDateYear(year);
-    selectedYear = year;
   }
 
   void updateMonthString(int selectedMonthPos){
@@ -125,16 +124,18 @@ class ScreenMainState extends State with SingleTickerProviderStateMixin, RouteAw
                     ),
                     SizedBox(height: 32.0,),
                     StatelessRoversPager(
-                      onRoverPageChanged: (rover) {
+                      onRoverPageChanged: (rover, index) {
+                        lastRoverIndex = index;
                         blocRoverPhotos.setRoverType(rover);
                       },
+                      lastPage: lastRoverIndex,
                     ),
                     SizedBox(height: 16.0,),
                     Padding(
                       padding: EdgeInsets.only(left: 32.0),
                       child: StatefulYearSelectorWidget(
                         key: yearSelectorKey,
-                        yearString: selectedYear,
+                        yearString: GlobalData().getSelectedYear(),
                         onTap: () {
                           showDialog(
                             builder: (BuildContext context) {

@@ -10,6 +10,7 @@ class GlobalData {
   }
 
   var _favoritesIsNeedUpdateStatus = false;
+  var _selectedYear = "2019";
 
   bool getFavoritesIsNeedUpdateStatus() => _favoritesIsNeedUpdateStatus;
 
@@ -20,6 +21,12 @@ class GlobalData {
   void setAvailableYears(List<String> years) {
     _availableYears = years;
   }
+
+  void setSelectedYear(String year) {
+    _selectedYear = year;
+  }
+
+  String getSelectedYear() => _selectedYear;
 
   List<String> getAvailableYears() => _availableYears;
 }
