@@ -14,6 +14,7 @@ enum RoverType {
 
 class StatelessRoversPager extends StatelessWidget {
   Function(RoverType type) onRoverPageChanged;
+  var lastPage = 1;
   
   StatelessRoversPager({this.onRoverPageChanged});
   var rovers = [
@@ -33,11 +34,12 @@ class StatelessRoversPager extends StatelessWidget {
       height: 170.0,
       child: PageView(
         onPageChanged: (index) {
+          lastPage = index;
           onRoverPageChanged(rovers[index]);
         },
         scrollDirection: Axis.horizontal,
         controller: PageController(
-          initialPage: 1,
+          initialPage: lastPage,
           viewportFraction: 0.8
         ),
         children: roversCards,
