@@ -26,6 +26,7 @@ class ScreenMainState extends State with SingleTickerProviderStateMixin, RouteAw
   PersistentBottomSheetController bottomSheetMenuController;
 
   var lastRoverIndex = 1;
+  var lastSelectedMonth = new DateTime.now().month-1;
 
   @override
   void initState() {
@@ -56,6 +57,7 @@ class ScreenMainState extends State with SingleTickerProviderStateMixin, RouteAw
   }
 
   void updateMonthString(int selectedMonthPos){
+    lastSelectedMonth = selectedMonthPos - 1;
     blocRoverPhotos.setDateMonth(selectedMonthPos.toString());
   }
 
@@ -146,7 +148,7 @@ class ScreenMainState extends State with SingleTickerProviderStateMixin, RouteAw
                       ),
                     ),
                     SizedBox(height: 16.0,),
-                    Container(height: 36.0, child: StatefulMonthChipsGroup(onTap: updateMonthString,),),
+                    Container(height: 36.0, child: StatefulMonthChipsGroup(onTap: updateMonthString, selectedMonthPos: lastSelectedMonth,),),
                     SizedBox(height: 16.0,),
                   ]),
                 ),

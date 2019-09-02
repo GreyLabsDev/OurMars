@@ -17,7 +17,7 @@ class ScreenAboutState extends State {
       backgroundColor: AppColors.colorBackground,
       body: SafeArea(
         child: Padding(
-          padding: EdgeInsets.all(16.0),
+          padding: EdgeInsets.all(32.0),
           child: SingleChildScrollView(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,

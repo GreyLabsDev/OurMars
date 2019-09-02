@@ -158,19 +158,23 @@ class StatefulYearSelectorWidgetState extends State {
 
 class StatefulMonthChipsGroup extends StatefulWidget {
   final Function(int selectedMonthPos) onTap;
-
-  StatefulMonthChipsGroup({Key key, this.onTap}) : super(key: key);
+  int selectedMonthPos;
+  
+  StatefulMonthChipsGroup({Key key, this.onTap, this.selectedMonthPos}) : super(key: key);
 
   @override
-  State<StatefulWidget> createState() => StatefulMonthChipsGroupState(onTap: onTap);
+  State<StatefulWidget> createState() => StatefulMonthChipsGroupState(onTap:(int month) {
+     selectedMonthPos = month - 1;
+     onTap(month);
+  }, selectedMonthPos: selectedMonthPos);
 
 }
 
 class StatefulMonthChipsGroupState extends State {
   final Function(int selectedMonthPos) onTap;
-  int selectedMonthPos = new DateTime.now().month-1;
+  int selectedMonthPos;
 
-  StatefulMonthChipsGroupState({this.onTap});
+  StatefulMonthChipsGroupState({this.onTap, this.selectedMonthPos});
 
   void updateChipsState(int selectedChip) {
     setState(() {
