@@ -25,6 +25,7 @@ class ScreenMainState extends State with SingleTickerProviderStateMixin, RouteAw
   final GlobalKey<StatefulYearSelectorWidgetState> yearSelectorKey = new GlobalKey<StatefulYearSelectorWidgetState>();
   PersistentBottomSheetController bottomSheetMenuController;
 
+  var isMenuShown = false;
   var lastRoverIndex = 1;
   var lastSelectedMonth = new DateTime.now().month-1;
 
@@ -78,6 +79,8 @@ class ScreenMainState extends State with SingleTickerProviderStateMixin, RouteAw
   }
 
   void showBottomSheetMenu() {
+    if (!isMenuShown) {
+      isMenuShown = true;
       bottomSheetMenuController = scaffoldKey.currentState.showBottomSheet(
        (builder) {
            return SemiRoundedBorderContainer(
@@ -97,6 +100,10 @@ class ScreenMainState extends State with SingleTickerProviderStateMixin, RouteAw
           },
           backgroundColor: Colors.transparent,
       );
+    } else {
+      isMenuShown = false;
+      bottomSheetMenuController.close();
+    }
   }
   
   @override
