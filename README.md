@@ -27,6 +27,7 @@ This is example Flutter application created by two mobile developers in 4 work d
 - [Flutter documentation](https://flutter.dev/docs)
 - [Flutter for Android developers](https://flutter.dev/docs/get-started/flutter-for/android-devs)
 - [Flutter for iOS developers](https://flutter.dev/docs/get-started/flutter-for/ios-devs)
+- [Awesome Flutter - great collection of material about this technology](https://github.com/Solido/awesome-flutter)
 - [Dart documentation](https://flutter.dev/docs/resources/bootstrap-into-dart)
 - [Video about BLoC pattern - Code sharing, better together (Dart Conference 2018)](https://youtu.be/PLHln7wHgPE)
 - [Post about 3 architecture approaches](https://medium.com/flutter-community/flutter-app-architecture-101-vanilla-scoped-model-bloc-7eff7b2baf7e)
