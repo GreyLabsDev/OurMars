@@ -4,6 +4,9 @@
 
 This is example Flutter application created by two mobile developers in 4 work days. Goal of this project is learning base concepts of Flutter,BLoC pattern, asyncronous and background tasks in Dart/Flutter, available stable libraries.
 
+![screenshoot](https://github.com/GreyLabsDev/OurMars/blob/master/scr_one.png)
+![screenshoot](https://github.com/GreyLabsDev/OurMars/blob/master/scr_two.png)
+
 ### Libraries we used
 - [http](https://pub.dev/packages/http)
 - [sqflite](https://pub.dev/packages/sqflite)
