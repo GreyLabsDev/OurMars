@@ -32,3 +32,10 @@ This is example Flutter application created by two mobile developers in 4 work d
 - [Video about BLoC pattern - Code sharing, better together (Dart Conference 2018)](https://youtu.be/PLHln7wHgPE)
 - [Post about 3 architecture approaches](https://medium.com/flutter-community/flutter-app-architecture-101-vanilla-scoped-model-bloc-7eff7b2baf7e)
 - [Reactive Programming - Streams - BLoC](https://www.didierboelens.com/2018/08/reactive-programming---streams---bloc/)
+
+
+### Roadmap
+- Add paging support for main screen
+- Fix all minor UI bugs
+- Add animated loaders 
+- Refactoring
