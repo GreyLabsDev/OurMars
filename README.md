@@ -36,6 +36,7 @@ This is example Flutter application created by two mobile developers in 4 work d
 
 ### Roadmap
 - Add paging support for main screen
-- Fix all minor UI bugs
 - Add animated loaders 
+- Add placeholders
+- Fix all minor UI bugs
 - Refactoring
